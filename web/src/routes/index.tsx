@@ -22,9 +22,18 @@ function HomePage() {
 	return (
 		<>
 			<Hero />
-			<section className="container mx-auto px-4 py-16">
-				<h2 className="text-3xl font-bold mb-8">最新文章</h2>
-				<PostList query={{ page: 1, limit: 6 }} />
+			<section className="container mx-auto px-4 py-24">
+				<div className="mb-12 flex items-end justify-between">
+					<div>
+						<p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">
+							{"// latest"}
+						</p>
+						<h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+							最新文章
+						</h2>
+					</div>
+				</div>
+				<PostList query={{ page: 1, limit: 7 }} />
 			</section>
 			<section className="container mx-auto px-4 py-16">
 				<h2 className="text-3xl font-bold mb-8">GitHub 活动</h2>

@@ -3,63 +3,66 @@ import { Skeleton } from "@shared/ui/skeleton";
 import { usePosts } from "../api/queries";
 import type { PostListQuery } from "../model/types";
 import PostCard from "./PostCard";
+import PostFeatured from "./PostFeatured";
 
 /**
- * PostListProps - PostList 组件属性
+ * PostListProps - 首页文章列表属性
  */
 export interface PostListProps {
-	/**
-	 * 分页与标签筛选
-	 */
+	/** 分页与标签筛选 */
 	query?: PostListQuery;
-	/**
-	 * 是否显示加载骨架
-	 * @default true
-	 */
+	/** 是否显示加载骨架 */
 	showSkeleton?: boolean;
 }
 
 /**
- * PostList - 文章列表
+ * PostList - 首页文章列表（featured + 错落网格）
  *
- * 自动处理三种状态：
- * - 加载中：渲染骨架卡片网格（数量与 limit 对齐）
- * - 错误：渲染错误提示（不抛错，避免整页崩）
- * - 空数据：渲染"暂无文章"
- *
- * 业务页若需自定义 loading/error，可传 showSkeleton=false 自己接管。
+ * 第一篇 featured（PostFeatured），其余 PostCard 错落网格。
+ * 加载中渲染骨架，错误/空态有降级。
  */
 const PostList = ({ query = {}, showSkeleton = true }: PostListProps) => {
 	const { data, isLoading, isError, error } = usePosts(query);
 
 	if (isLoading && showSkeleton) {
 		return (
-			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				{Array.from({ length: query.limit ?? 6 }).map((_, i) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: 静态骨架列表，顺序固定
-					<Skeleton key={i} className="h-72 rounded-lg" />
-				))}
+			<div className="space-y-12">
+				<Skeleton className="h-80 rounded-xl" />
+				<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					{Array.from({ length: (query.limit ?? 6) - 1 }).map((_, i) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: 静态骨架，顺序固定
+						<Skeleton key={i} className="h-64 rounded-xl" />
+					))}
+				</div>
 			</div>
 		);
 	}
 
 	if (isError) {
 		return (
-			<p className="text-center text-muted-foreground py-12">
+			<p className="py-12 text-center text-muted-foreground">
 				加载失败：{error instanceof Error ? error.message : "未知错误"}
 			</p>
 		);
 	}
 
 	if (!data?.data?.length) {
-		return <p className="text-center text-muted-foreground py-12">暂无文章</p>;
+		return <p className="py-12 text-center text-muted-foreground">暂无文章</p>;
 	}
 
+	const [featured, ...rest] = data.data;
+
 	return (
-		<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-			{data.data.map((post) => (
-				<PostCard key={post.id} post={post} />
-			))}
+		<div className="space-y-16">
+			{featured ? <PostFeatured post={featured} /> : null}
+
+			{rest.length > 0 ? (
+				<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					{rest.map((post, i) => (
+						<PostCard key={post.id} post={post} index={i} />
+					))}
+				</div>
+			) : null}
 		</div>
 	);
 };
