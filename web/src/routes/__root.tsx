@@ -11,6 +11,7 @@ import AnnouncementBar from "@widgets/AnnouncementBar";
 import Footer from "@widgets/Footer";
 import Header from "@widgets/Header";
 import MusicPlayer from "@widgets/MusicPlayer";
+import ScrollProgress from "@widgets/ScrollProgress";
 import type { RouterContext } from "../router";
 import AppProvider from "../shared/api/provider";
 import { getCurrentUser } from "../shared/server/session";
@@ -53,6 +54,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootComponent() {
 	return (
 		<AppProvider>
+			<ScrollProgress />
 			<AnnouncementBar />
 			<Header />
 			<main className="min-h-[60vh]">
