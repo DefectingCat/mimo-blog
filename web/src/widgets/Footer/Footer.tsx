@@ -1,31 +1,45 @@
 import { useSettings } from "@features/settings/api/queries";
 
 /**
- * Footer - 页脚
+ * Footer - 页脚（结构不变，换皮）
  *
- * 显示站名 + 社交链接（从站点配置读，SSR 已预取）。
- * 配置未加载时不渲染社交区，避免闪烁。
+ * Mono 字体 + 电光蓝 hover + 细分割线。
  */
 const Footer = () => {
 	const { data } = useSettings();
 	const year = new Date().getFullYear();
 
 	return (
-		<footer className="border-t border-border mt-16">
-			<div className="container mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-				<p className="text-sm text-muted-foreground">
+		<footer className="mt-24 border-t border-border">
+			<div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row">
+				<p className="font-mono text-sm text-muted-foreground">
 					© {year} {data?.siteName ?? "Blog"}
 				</p>
 				{data?.socials ? (
-					<div className="flex gap-4 text-sm text-muted-foreground">
+					<div className="flex gap-6 font-mono text-sm">
 						{data.socials.github ? (
-							<a href={data.socials.github}>GitHub</a>
+							<a
+								href={data.socials.github}
+								className="text-muted-foreground transition-colors hover:text-accent"
+							>
+								GitHub
+							</a>
 						) : null}
 						{data.socials.twitter ? (
-							<a href={data.socials.twitter}>Twitter</a>
+							<a
+								href={data.socials.twitter}
+								className="text-muted-foreground transition-colors hover:text-accent"
+							>
+								Twitter
+							</a>
 						) : null}
 						{data.socials.email ? (
-							<a href={`mailto:${data.socials.email}`}>Email</a>
+							<a
+								href={`mailto:${data.socials.email}`}
+								className="text-muted-foreground transition-colors hover:text-accent"
+							>
+								Email
+							</a>
 						) : null}
 					</div>
 				) : null}
