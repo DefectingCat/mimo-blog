@@ -96,3 +96,152 @@
     color: hsl(var(--foreground));
   }
 }
+
+/* highlight.js 代码高亮主题（暗色） */
+@import "highlight.js/styles/github-dark.css";
+
+/* 详情页正文 prose 定制 */
+.prose-editorial {
+  --tw-prose-body: hsl(var(--muted-foreground));
+  --tw-prose-headings: hsl(var(--foreground));
+  --tw-prose-links: hsl(var(--accent));
+  --tw-prose-bold: hsl(var(--foreground));
+  --tw-prose-code: hsl(var(--foreground));
+  --tw-prose-quotes: hsl(var(--foreground));
+  --tw-prose-quote-borders: hsl(var(--accent));
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  max-width: 65ch;
+  color: hsl(var(--muted-foreground));
+}
+
+.prose-editorial :where(h1, h2, h3, h4) {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  color: hsl(var(--foreground));
+}
+
+.prose-editorial :where(h1) {
+  font-size: 2em;
+}
+
+.prose-editorial :where(h2) {
+  font-size: 1.5em;
+}
+
+.prose-editorial :where(h3) {
+  font-size: 1.25em;
+}
+
+.prose-editorial :where(p) {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.prose-editorial :where(ul, ol) {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.5em;
+}
+
+.prose-editorial :where(ul) {
+  list-style-type: disc;
+}
+
+.prose-editorial :where(ol) {
+  list-style-type: decimal;
+}
+
+.prose-editorial :where(li) {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose-editorial :where(a) {
+  color: hsl(var(--accent));
+  text-decoration: none;
+  border-bottom: 1px solid hsl(var(--accent) / 0.4);
+  transition: border-color 0.2s;
+}
+
+.prose-editorial :where(a):hover {
+  border-bottom-color: hsl(var(--accent));
+}
+
+.prose-editorial :where(strong) {
+  color: hsl(var(--foreground));
+  font-weight: 700;
+}
+
+.prose-editorial :where(code):not(pre code) {
+  font-family: var(--font-mono);
+  background-color: hsl(var(--accent) / 0.12);
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  border: 0;
+  font-weight: 500;
+}
+
+.prose-editorial :where(pre) {
+  background-color: hsl(222 40% 7%);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-card);
+  padding: 0;
+  overflow-x: auto;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose-editorial :where(pre) :where(code) {
+  display: block;
+  padding: 1.25rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  background: transparent;
+  color: inherit;
+}
+
+.prose-editorial :where(blockquote) {
+  font-style: normal;
+  border-left-width: 2px;
+  border-left-color: hsl(var(--accent));
+  padding-left: 1.25rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose-editorial :where(img) {
+  border-radius: var(--radius-image);
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose-editorial :where(table) {
+  font-size: 0.9375rem;
+  width: 100%;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose-editorial :where(th, td) {
+  border-color: hsl(var(--border));
+  border-style: solid;
+  border-width: 0 0 1px 0;
+  padding: 0.6em 0.9em;
+}
+
+.prose-editorial :where(th) {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.prose-editorial :where(hr) {
+  border-color: hsl(var(--border));
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
