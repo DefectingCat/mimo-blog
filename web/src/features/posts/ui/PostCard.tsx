@@ -1,79 +1,92 @@
+"use client";
+
 import { Link } from "@tanstack/react-router";
 import { formatDistanceToNow } from "date-fns";
 import { zhCN } from "date-fns/locale";
-
+import { motion, useReducedMotion } from "motion/react";
 import type { Post } from "../model/types";
 
 /**
- * PostCardProps - PostCard 组件属性
+ * PostCardProps - 文章卡片属性
  */
 export interface PostCardProps {
-	/**
-	 * 文章数据
-	 */
+	/** 文章数据 */
 	post: Post;
+	/** 错峰入场索引 */
+	index?: number;
 }
 
 /**
- * PostCard - 文章卡片
+ * PostCard - 首页文章卡（杂志式，兼容有无封面）
  *
- * 用于首页文章列表的单条展示。
- *
- * 支持：
- * - 封面图懒加载
- * - Hover 动画（图片放大 + 阴影增强）
- * - 标签徽章（最多显示前 3 个）
- * - 相对时间显示（如 "3 天前"）
+ * 有封面：封面直角置顶 + 下方标题/meta。
+ * 无封面：纯排版卡（Mono 日期 + 大标题 + excerpt），靠排版撑视觉权重。
+ * hover：标题变 accent + 封面 scale。
+ * whileInView 错峰入场（stagger），reduced-motion 静态。
  */
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, index = 0 }: PostCardProps) => {
+	const reduce = useReducedMotion();
+
 	return (
-		<article className="group rounded-lg border border-border bg-card overflow-hidden transition-shadow hover:shadow-lg">
+		<motion.article
+			initial={reduce ? false : { opacity: 0, y: 24 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, amount: 0.2 }}
+			transition={{
+				duration: 0.5,
+				delay: reduce ? 0 : Math.min(index * 0.06, 0.3),
+				ease: [0.16, 1, 0.3, 1],
+			}}
+			className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-accent/50"
+		>
 			{post.cover_image ? (
-				<Link to="/blog/$slug" params={{ slug: post.slug }}>
+				<Link
+					to="/blog/$slug"
+					params={{ slug: post.slug }}
+					className="block overflow-hidden"
+				>
 					<img
 						src={post.cover_image}
 						alt={post.title}
 						loading="lazy"
-						className="w-full h-48 object-cover transition-transform group-hover:scale-105"
+						className="aspect-[16/9] w-full object-cover transition-transform duration-500 group-hover:scale-105"
 					/>
 				</Link>
 			) : null}
-			<div className="p-5">
-				{post.tags.length > 0 ? (
-					<div className="flex gap-2 mb-2">
-						{post.tags.slice(0, 3).map((tag) => (
-							<span
-								key={tag}
-								className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground"
-							>
-								{tag}
-							</span>
-						))}
-					</div>
-				) : null}
-				<h3 className="text-lg font-semibold mb-2 line-clamp-2">
-					<Link
-						to="/blog/$slug"
-						params={{ slug: post.slug }}
-						className="hover:text-primary"
-					>
+
+			<div className="flex flex-1 flex-col p-6">
+				<time className="mb-3 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+					{new Date(post.published_at)
+						.toLocaleDateString("zh-CN", {
+							year: "numeric",
+							month: "2-digit",
+							day: "2-digit",
+						})
+						.replace(/\//g, ".")}
+				</time>
+
+				<h3 className="mb-2 text-xl font-semibold leading-snug transition-colors group-hover:text-accent">
+					<Link to="/blog/$slug" params={{ slug: post.slug }}>
 						{post.title}
 					</Link>
 				</h3>
-				<p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+
+				<p className="mb-4 line-clamp-2 flex-1 text-sm text-muted-foreground">
 					{post.excerpt}
 				</p>
-				<div className="flex items-center justify-between text-xs text-muted-foreground">
+
+				<div className="flex items-center gap-3 font-mono text-xs text-muted-foreground">
 					<span>{post.author.username}</span>
-					<time>
+					<span aria-hidden="true">·</span>
+					<span>
 						{formatDistanceToNow(new Date(post.published_at), {
 							addSuffix: true,
 							locale: zhCN,
 						})}
-					</time>
+					</span>
 				</div>
 			</div>
-		</article>
+		</motion.article>
 	);
 };
 
