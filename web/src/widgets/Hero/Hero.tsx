@@ -57,7 +57,9 @@ const Hero = () => {
 						transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
 					>
 						<Button size="lg" asChild className="rounded-full">
-							<Link to="/blog">进入博客</Link>
+							<Link to="/blog" search={{ page: 1 }}>
+								进入博客
+							</Link>
 						</Button>
 					</motion.div>
 				</div>

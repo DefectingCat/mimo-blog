@@ -29,6 +29,7 @@ function BlogDetailPage() {
 				<div className="mx-auto w-full max-w-[680px] xl:mx-0">
 					<Link
 						to="/blog"
+						search={{ page: 1 }}
 						className="mb-8 inline-flex items-center gap-1 font-mono text-sm text-muted-foreground transition-colors hover:text-accent"
 					>
 						<span aria-hidden="true">←</span> Back
