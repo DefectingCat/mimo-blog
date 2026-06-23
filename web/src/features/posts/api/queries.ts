@@ -1,7 +1,7 @@
 import { httpClient } from "@shared/api/http";
 import type { PagedResponse } from "@shared/api/types";
 import { useQuery } from "@tanstack/react-query";
-import type { Post, PostListQuery } from "../model/types";
+import type { Post, PostDetail, PostListQuery } from "../model/types";
 import { postKeys } from "./keys";
 
 /**
@@ -36,4 +36,30 @@ export const usePosts = (query: PostListQuery = {}) =>
 	useQuery({
 		queryKey: postKeys.list(query),
 		queryFn: () => fetchPosts(query),
+	});
+
+/**
+ * fetchPost - 调后端 GET /api/v1/posts/{slug} 拉取文章详情
+ *
+ * 详情接口返回单个 PostDTO（非分页 envelope，但 httpClient 仍拆为 { data }）。
+ *
+ * @param slug 文章 slug
+ * @returns 解包后的文章详情
+ */
+export const fetchPost = async (slug: string): Promise<PostDetail> => {
+	const res = await httpClient.get<PostDetail>(`/posts/${slug}`);
+	return res.data;
+};
+
+/**
+ * usePost - 文章详情 hook
+ *
+ * 自动缓存（key 含 slug），网络错误重试 2 次。
+ *
+ * @param slug 文章 slug
+ */
+export const usePost = (slug: string) =>
+	useQuery({
+		queryKey: postKeys.detail(slug),
+		queryFn: () => fetchPost(slug),
 	});
