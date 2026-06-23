@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/fonts.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -20,7 +21,8 @@
   --color-destructive-foreground: hsl(var(--destructive-foreground));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans: "Geist Variable", system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
   --radius: 0.5rem;
 }
 
